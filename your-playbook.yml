@@ -1,0 +1,31 @@
+---
+- name: Setup serveur avec prérequis pour Ansible
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Mise à jour du cache APT
+      apt:
+        update_cache: yes
+
+    - name: Installer les paquets nécessaires
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - python3
+        - python3-pip
+        - git
+        - curl
+
+    - name: Mettre à jour pip
+      pip:
+        name: pip
+        state: latest
+        executable: pip3
+
+    - name: Installer Ansible via pip
+      pip:
+        name: ansible
+        state: latest
+        executable: pip3
